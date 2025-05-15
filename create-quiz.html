@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Quiz - Online Quiz Maker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #e9f5ff 100%);
+      min-height: 100vh;
+      color: #222;
+      overflow-x: hidden;
+    }
+    nav {
+      display: flex;
+      justify-content: flex-end;
+      padding: 1.5rem 3rem 0 0;
+    }
+    nav a {
+      color: #3b82f6;
+      text-decoration: none;
+      margin-left: 2rem;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: color 0.2s;
+      border-bottom: 2px solid transparent;
+      padding-bottom: 2px;
+    }
+    nav a:hover {
+      color: #2563eb;
+      border-bottom: 2px solid #2563eb;
+    }
+    .quiz-create-container {
+      max-width: 600px;
+      margin: 7vh auto 0 auto;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px 0 rgba(59, 130, 246, 0.10);
+      padding: 2.5rem 2rem 2rem 2rem;
+      text-align: left;
+      animation: fadeIn 1.2s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(40px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .quiz-create-container h2 {
+      font-size: 2rem;
+      margin-bottom: 1.2rem;
+      background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+    .quiz-create-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    .quiz-create-form input, .quiz-create-form select, .quiz-create-form textarea {
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      border: 1.5px solid #e0e7ef;
+      font-size: 1.08rem;
+      background: #f3f6fa;
+      color: #222;
+      outline: none;
+      transition: box-shadow 0.2s, background 0.2s, border 0.2s;
+      box-shadow: 0 2px 8px rgba(59,130,246,0.04);
+      resize: none;
+    }
+    .quiz-create-form input:focus, .quiz-create-form select:focus, .quiz-create-form textarea:focus {
+      background: #e9f5ff;
+      border: 1.5px solid #3b82f6;
+      box-shadow: 0 4px 16px rgba(59,130,246,0.10);
+    }
+    .questions-section {
+      margin-top: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .question-block {
+      background: #f8fafc;
+      border: 1px solid #e0e7ef;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 2px 8px rgba(59,130,246,0.03);
+    }
+    .question-block label {
+      font-weight: 500;
+      color: #2563eb;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+    .remove-question-btn {
+      background: none;
+      border: none;
+      color: #ef4444;
+      font-weight: 600;
+      cursor: pointer;
+      float: right;
+      font-size: 1rem;
+      margin-top: -0.5rem;
+      margin-bottom: 0.5rem;
+      transition: color 0.2s;
+    }
+    .remove-question-btn:hover {
+      color: #b91c1c;
+      text-decoration: underline;
+    }
+    .add-question-btn, .submit-btn {
+      padding: 0.9rem 0;
+      font-size: 1.13rem;
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%);
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(59,130,246,0.13);
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+      outline: none;
+      margin-top: 0.5rem;
+      letter-spacing: 1px;
+      width: 100%;
+    }
+    .add-question-btn:hover, .submit-btn:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 8px 32px rgba(59,130,246,0.18);
+      background: linear-gradient(90deg, #06b6d4 0%, #3b82f6 100%);
+      color: #fff;
+    }
+    .success-message {
+      color: #22c55e;
+      font-weight: 600;
+      margin-top: 1rem;
+      text-align: center;
+    }
+    .error-message {
+      color: #ef4444;
+      margin-top: 0.5rem;
+      font-size: 1rem;
+      min-height: 1.2em;
+      text-align: center;
+    }
+    @media (max-width: 600px) {
+      .quiz-create-container { padding: 1.2rem 0.3rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="quiz-entry.html">Take Quiz</a>
+    <a href="login.html">Admin Login</a>
+  </nav>
+  <div class="quiz-create-container">
+    <h2>Create a New Quiz</h2>
+    <form class="quiz-create-form" id="quizCreateForm" autocomplete="off">
+      <label for="quizName">Quiz Name</label>
+      <input type="text" id="quizName" name="quizName" placeholder="Enter quiz name" required>
+
+      <label for="numQuestions">Number of Questions</label>
+      <input type="number" id="numQuestions" name="numQuestions" min="1" max="50" value="1" required>
+
+      <div class="questions-section" id="questionsSection">
+        <!-- Questions will be dynamically inserted here -->
+      </div>
+
+      <button type="button" class="add-question-btn" id="addQuestionBtn">+ Add Question</button>
+      <button type="submit" class="submit-btn">Create Quiz</button>
+      <div class="success-message" id="successMsg"></div>
+      <div class="error-message" id="errorMsg"></div>
+    </form>
+  </div>
+  <script>
+    // Dynamically handle questions
+    const numQuestionsInput = document.getElementById('numQuestions');
+    const questionsSection = document.getElementById('questionsSection');
+    const addQuestionBtn = document.getElementById('addQuestionBtn');
+    const quizCreateForm = document.getElementById('quizCreateForm');
+    const successMsg = document.getElementById('successMsg');
+    const errorMsg = document.getElementById('errorMsg');
+
+    let questionCount = 1;
+
+    function createQuestionBlock(index) {
+      return `
+        <div class="question-block" id="questionBlock${index}">
+          <button type="button" class="remove-question-btn" onclick="removeQuestion(${index})" ${index === 1 ? 'style="display:none;"' : ''}>Remove</button>
+          <label>Question ${index}</label>
+          <input type="text" name="question${index}" placeholder="Enter question" required>
+          <label>Answer</label>
+          <input type="text" name="answer${index}" placeholder="Enter answer" required>
+        </div>
+      `;
+    }
+
+    function renderQuestions(n) {
+      let html = '';
+      for (let i = 1; i <= n; i++) {
+        html += createQuestionBlock(i);
+      }
+      questionsSection.innerHTML = html;
+      questionCount = n;
+    }
+
+    // Remove question
+    window.removeQuestion = function(index) {
+      const block = document.getElementById(`questionBlock${index}`);
+      if (block) {
+        block.remove();
+        questionCount--;
+        numQuestionsInput.value = questionCount;
+      }
+    };
+
+    // Initial render
+    renderQuestions(Number(numQuestionsInput.value));
+
+    // Change number of questions
+    numQuestionsInput.addEventListener('change', function() {
+      let n = Number(numQuestionsInput.value);
+      if (n < 1) n = 1;
+      if (n > 50) n = 50;
+      renderQuestions(n);
+    });
+
+    // Add question button
+    addQuestionBtn.addEventListener('click', function() {
+      if (questionCount < 50) {
+        questionCount++;
+        numQuestionsInput.value = questionCount;
+        questionsSection.insertAdjacentHTML('beforeend', createQuestionBlock(questionCount));
+      }
+    });
+
+    // Handle form submit (demo only)
+    quizCreateForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      successMsg.textContent = '';
+      errorMsg.textContent = '';
+      const quizName = document.getElementById('quizName').value.trim();
+      if (!quizName) {
+        errorMsg.textContent = 'Quiz name is required.';
+        return;
+      }
+      // Validate all questions and answers
+      for (let i = 1; i <= questionCount; i++) {
+        const q = quizCreateForm[`question${i}`];
+        const a = quizCreateForm[`answer${i}`];
+        if (!q || !a || !q.value.trim() || !a.value.trim()) {
+          errorMsg.textContent = `Please fill all questions and answers.`;
+          return;
+        }
+      }
+      // Demo: show success
+      successMsg.textContent = 'Quiz created successfully!';
+      quizCreateForm.reset();
+      renderQuestions(1);
+      numQuestionsInput.value = 1;
+      setTimeout(() => { successMsg.textContent = ''; }, 2000);
+    });
+  </script>
+</body>
+</html>
