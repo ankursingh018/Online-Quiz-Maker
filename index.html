@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Online Quiz Maker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      min-height: 100vh;
+      color: #fff;
+      overflow-x: hidden;
+    }
+    nav {
+      display: flex;
+      justify-content: flex-end;
+      padding: 1.5rem 3rem 0 0;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin-left: 2rem;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: color 0.2s;
+    }
+    nav a:hover {
+      color: #ffd700;
+    }
+    .container {
+      max-width: 700px;
+      margin: 7vh auto 0 auto;
+      background: rgba(255,255,255,0.08);
+      border-radius: 24px;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      padding: 3rem 2.5rem;
+      text-align: center;
+      animation: fadeIn 1.2s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(40px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: 2px;
+      background: linear-gradient(90deg, #ff512f 0%, #dd2476 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    p {
+      font-size: 1.3rem;
+      margin-bottom: 2.5rem;
+      color: #e0e0e0;
+    }
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .cta-btn {
+      padding: 1rem 2.5rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 30px;
+      background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+      color: #222;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(67,233,123,0.2);
+      transition: transform 0.2s, box-shadow 0.2s;
+      outline: none;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-btn:hover {
+      transform: translateY(-4px) scale(1.04);
+      box-shadow: 0 8px 32px rgba(67,233,123,0.3);
+      background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%);
+    }
+    .features {
+      margin-top: 2.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+    }
+    .feature-card {
+      background: rgba(255,255,255,0.13);
+      border-radius: 18px;
+      padding: 1.2rem 1.5rem;
+      min-width: 180px;
+      max-width: 220px;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(31,38,135,0.10);
+      font-size: 1.05rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: 1px solid rgba(255,255,255,0.08);
+      animation: fadeIn 1.2s cubic-bezier(.39,.575,.565,1) backwards;
+    }
+    .feature-card:nth-child(1) { animation-delay: 0.2s;}
+    .feature-card:nth-child(2) { animation-delay: 0.4s;}
+    .feature-card:nth-child(3) { animation-delay: 0.6s;}
+    .feature-card:nth-child(4) { animation-delay: 0.8s;}
+    .feature-card:hover {
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 6px 24px rgba(31,38,135,0.18);
+      background: rgba(255,255,255,0.18);
+    }
+    @media (max-width: 700px) {
+      .container { padding: 2rem 1rem; }
+      h1 { font-size: 2.1rem; }
+      .features { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="quiz.html">Take Quiz</a>
+    <a href="login.html">Admin Login</a>
+  </nav>
+  <div class="container">
+    <h1>Online Quiz Maker</h1>
+    <p>
+      Create, manage, and take quizzes with ease.<br>
+      Challenge your friends or students, track scores, and enjoy a seamless quiz experience!
+    </p>
+    <div class="cta-buttons">
+      <button class="cta-btn" onclick="window.location.href='quiz-entry.html'">Take a Quiz</button>
+      <button class="cta-btn" onclick="window.location.href='login.html'">Admin Login</button>
+    </div>
+    <div class="features">
+      <div class="feature-card">
+        <strong>Easy Quiz Creation</strong><br>
+        Build quizzes in minutes with a simple interface.
+      </div>
+      <div class="feature-card">
+        <strong>Real-Time Timer</strong><br>
+        Adjustable timer for each quiz, set by admin.
+      </div>
+      <div class="feature-card">
+        <strong>Secure Admin Panel</strong><br>
+        Only admins can manage questions and settings.
+      </div>
+      <div class="feature-card">
+        <strong>Instant Results</strong><br>
+        Get your score and feedback right after the quiz!
+      </div>
+    </div>
+  </div>
+  <script>
+    // Fade-in animation for container and feature cards (already handled by CSS)
+    // You can add more JS for interactivity if needed
+  </script>
+</body>
+</html>
