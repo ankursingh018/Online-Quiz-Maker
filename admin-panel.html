@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel - Quiz Results</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+      min-height: 100vh;
+      margin: 0;
+    }
+    .admin-container {
+      max-width: 900px;
+      margin: 5vh auto 0 auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 32px 0 rgba(59, 130, 246, 0.10);
+      padding: 2.5rem 2rem 2rem 2rem;
+      animation: fadeIn 1.2s ease;
+    }
+    h2 {
+      color: #2563eb;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1.5rem;
+    }
+    th, td {
+      padding: 0.7rem 1rem;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: left;
+    }
+    th {
+      background: #f1f5f9;
+      color: #2563eb;
+      font-weight: 600;
+    }
+    tr:hover {
+      background: #f3f4f6;
+    }
+    .filter-bar {
+      margin-bottom: 1.5rem;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .filter-bar input {
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      font-size: 1rem;
+    }
+    .filter-bar button {
+      padding: 0.5rem 1.2rem;
+      border-radius: 6px;
+      border: none;
+      background: #2563eb;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .filter-bar button:hover {
+      background: #1d4ed8;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(40px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+  <script>
+    // Redirect to login if not logged in as admin
+    if (!localStorage.getItem('adminToken')) {
+      alert('Please login as admin to access the Admin Panel.');
+      window.location.href = 'login.html';
+    }
+  </script>
+  <div class="admin-container">
+    <h2>Quiz Results (Admin Panel)</h2>
+    <div class="filter-bar">
+      <input type="text" id="filterCode" placeholder="Filter by Quiz Code">
+      <button onclick="loadResults()">Filter</button>
+      <button onclick="resetFilter()">Show All</button>
+    </div>
+    <a href="index.html" style="display:inline-block;margin-bottom:1.5rem;color:#2563eb;text-decoration:none;font-weight:500;">&#8592; Back to Home</a>
+    <div id="resultsTable"></div>
+  </div>
+  <script>
+    async function loadResults() {
+      const code = document.getElementById('filterCode').value.trim();
+      let url = 'http://localhost:3000/api/all-quiz-results';
+      if (code) url += `?code=${encodeURIComponent(code)}`;
+      const res = await fetch(url);
+      const results = await res.json();
+      renderTable(results);
+    }
+
+    function resetFilter() {
+      document.getElementById('filterCode').value = '';
+      loadResults();
+    }
+
+    function renderTable(results) {
+      if (!results.length) {
+        document.getElementById('resultsTable').innerHTML = '<div style="color:#ef4444;">No results found.</div>';
+        return;
+      }
+      let html = `<table>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Quiz Code</th>
+          <th>Score</th>
+          <th>Total</th>
+          <th>Percentage</th>
+          <th>Submitted At</th>
+        </tr>`;
+      results.forEach((r, i) => {
+        const percent = r.total ? Math.round((r.score / r.total) * 100) : 0;
+        html += `<tr>
+          <td>${i + 1}</td>
+          <td>${r.name}</td>
+          <td>${r.code}</td>
+          <td>${r.score}</td>
+          <td>${r.total}</td>
+          <td>${percent}%</td>
+          <td>${r.timestamp ? new Date(r.timestamp).toLocaleString() : ''}</td>
+        </tr>`;
+      });
+      html += '</table>';
+      document.getElementById('resultsTable').innerHTML = html;
+    }
+
+    // Initial load
+    loadResults();
+  </script>
+</body>
+</html>

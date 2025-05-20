@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz Result - Online Quiz Maker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+      min-height: 100vh;
+      color: #222;
+      overflow-x: hidden;
+    }
+    .result-container {
+      max-width: 500px;
+      margin: 8vh auto 0 auto;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px 0 rgba(59, 130, 246, 0.10);
+      padding: 2.5rem 2rem 2rem 2rem;
+      animation: fadeIn 1.2s ease;
+      text-align: center;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(40px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .result-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #2563eb;
+      margin-bottom: 1.2rem;
+    }
+    .score {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #22c55e;
+      margin-bottom: 1.2rem;
+    }
+    .summary {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+    .percentage {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #3b82f6;
+      margin-bottom: 1.5rem;
+    }
+    .back-link {
+      display: block;
+      margin-top: 2rem;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .back-link:hover {
+      color: #ffb347;
+      text-decoration: underline;
+    }
+    canvas {
+      margin: 0 auto;
+      display: block;
+      max-width: 350px;
+    }
+    .error-message {
+      color: #ef4444;
+      font-size: 1.1rem;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="result-container" id="resultContainer">
+    <div class="result-title">Quiz Result</div>
+    <div class="score" id="score"></div>
+    <div class="percentage" id="percentage"></div>
+    <div class="summary" id="summary"></div>
+    <canvas id="resultChart" width="350" height="350"></canvas>
+    <a href="index.html" class="back-link">&#8592; Back to Home</a>
+  </div>
+  <script>
+    // Get params from URL
+    function getParam(name) {
+      const url = new URL(window.location.href);
+      return url.searchParams.get(name);
+    }
+    const code = getParam('code');
+    const name = getParam('name');
+
+    // Fetch result from backend
+    async function loadResult() {
+      try {
+        const res = await fetch(`http://localhost:3000/api/quiz-result?code=${encodeURIComponent(code)}&name=${encodeURIComponent(name)}`);
+        if (!res.ok) throw new Error('Result not found. Please make sure you have submitted the quiz.');
+        const result = await res.json();
+        // Calculate correct/incorrect and percentage if not present
+        const correct = result.correct !== undefined ? result.correct : result.score;
+        const incorrect = result.incorrect !== undefined ? result.incorrect : (result.total - result.score);
+        const percentage = result.percentage !== undefined
+          ? result.percentage
+          : Math.round((result.score / result.total) * 100);
+
+        document.getElementById('score').textContent = `Score: ${result.score} / ${result.total}`;
+        document.getElementById('percentage').textContent = `Percentage: ${percentage}%`;
+        document.getElementById('summary').textContent =
+          `Name: ${result.name} | Quiz Code: ${result.code} | Correct: ${correct} | Incorrect: ${incorrect} | Submitted: ${new Date(result.timestamp).toLocaleString()}`;
+        renderChart(correct, incorrect);
+      } catch (err) {
+        document.getElementById('resultContainer').innerHTML = `<div class="error-message">${err.message}</div>
+          <a href="index.html" class="back-link">&#8592; Back to Home</a>`;
+      }
+    }
+
+    function renderChart(correct, incorrect) {
+      const ctx = document.getElementById('resultChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Correct', 'Incorrect'],
+          datasets: [{
+            data: [correct, incorrect],
+            backgroundColor: ['#22c55e', '#ef4444'],
+            borderWidth: 2
+          }]
+        },
+        options: {
+          plugins: {
+            legend: { display: true, position: 'bottom' }
+          }
+        }
+      });
+    }
+
+    loadResult();
+  </script>
+</body>
+</html>
