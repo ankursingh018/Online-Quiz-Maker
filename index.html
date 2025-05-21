@@ -4,160 +4,303 @@
   <meta charset="UTF-8">
   <title>Online Quiz Maker</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Fonts for modern look -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Add this Google Font for the brand -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
       min-height: 100vh;
-      color: #fff;
-      overflow-x: hidden;
+      color: #222;
+      background: #e0eafc;
+      /* Blurred background image */
+      background-image: url('');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      position: relative;
+    }
+    .bg-blur {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(8px);
+      z-index: 0;
     }
     nav {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 2rem 3rem 0 3rem;
+      z-index: 2;
       display: flex;
-      justify-content: flex-end;
-      padding: 1.5rem 3rem 0 0;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .navbar-brand {
+      font-family: 'Pacifico', cursive;
+      font-size: 2rem;
+      color: #2563eb;
+      letter-spacing: 2px;
+      font-weight: 700;
+      margin-right: 2.5rem;
+      text-shadow: 0 2px 8px rgba(59,130,246,0.10);
+      user-select: none;
+      white-space: nowrap;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
     }
     nav a {
-      color: #fff;
+      color: #2563eb;
       text-decoration: none;
-      margin-left: 2rem;
       font-weight: 600;
       font-size: 1.1rem;
       transition: color 0.2s;
+      letter-spacing: 0.5px;
     }
     nav a:hover {
-      color: #ffd700;
+      color: #0ea5e9;
     }
-    .container {
-      max-width: 700px;
-      margin: 7vh auto 0 auto;
-      background: rgba(255,255,255,0.08);
-      border-radius: 24px;
-      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-      padding: 3rem 2.5rem;
-      text-align: center;
-      animation: fadeIn 1.2s ease;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(40px);}
-      to { opacity: 1; transform: translateY(0);}
-    }
-    h1 {
-      font-size: 3rem;
-      margin-bottom: 0.5rem;
-      letter-spacing: 2px;
-      background: linear-gradient(90deg, #ff512f 0%, #dd2476 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    p {
-      font-size: 1.3rem;
-      margin-bottom: 2.5rem;
-      color: #e0e0e0;
-    }
-    .cta-buttons {
+    .main-flex {
       display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-bottom: 1.5rem;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+      padding: 0 3vw;
+    }
+    .left-content {
+      max-width: 540px;
+      color: #222;
+      padding-left: 0;      /* Remove left padding */
+          /* Optional: add a small left margin */
+      text-align: left;
+      flex: 1;
+    }
+    .right-image {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-left: 2vw;
+    }
+    .right-image img {
+      max-width: 500px; /* Increased from 400px to 600px */
+      width: 100%;
+      border-radius: 24px;
+      box-shadow: 0 8px 32px 0 rgba(59, 130, 246, 0.10);
+      object-fit: cover;
+      background: #fff;
+    }
+    .headline {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 1.2rem;
+      color: #1e293b;
+      letter-spacing: 1px;
+    }
+    .headline span {
+      color: #2563eb;
+    }
+    .subheadline {
+      font-size: 1.18rem;
+      color: #334155;
+      margin-bottom: 2.2rem;
+      font-weight: 400;
+      line-height: 1.5;
     }
     .cta-btn {
-      padding: 1rem 2.5rem;
-      font-size: 1.2rem;
+      padding: 1.1rem 2.7rem;
+      font-size: 1.18rem;
       border: none;
       border-radius: 30px;
-      background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
-      color: #222;
+      background: linear-gradient(90deg, #2563eb 0%, #0ea5e9 100%);
+      color: #fff;
       font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 4px 16px rgba(67,233,123,0.2);
-      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(59,130,246,0.13);
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
       outline: none;
-      position: relative;
-      overflow: hidden;
+      margin-right: 1.2rem;
+      margin-bottom: 1.2rem;
+      letter-spacing: 0.5px;
     }
     .cta-btn:hover {
       transform: translateY(-4px) scale(1.04);
-      box-shadow: 0 8px 32px rgba(67,233,123,0.3);
-      background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%);
+      box-shadow: 0 8px 32px rgba(59,130,246,0.18);
+      background: linear-gradient(90deg, #0ea5e9 0%, #2563eb 100%);
     }
-    .features {
-      margin-top: 2.5rem;
+    @media (max-width: 900px) {
+      .main-flex { flex-direction: column; padding: 0 2vw; }
+      .left-content { padding-left: 0; }
+      .right-image { justify-content: center; padding-left: 0; margin-top: 2rem; }
+      .right-image img { max-width: 90vw; }
+      nav { padding: 1.2rem 1.2rem 0 0; }
+    }
+    @media (max-width: 600px) {
+      .main-flex { padding: 0 0.5vw; }
+      .left-content { padding-left: 0; }
+      .headline { font-size: 2rem; }
+      .right-image img { max-width: 98vw; }
+    }
+    .footer {
+      width: 100%;
+      background: #18181b;
+      padding: 2rem 0 1rem 0;
+      margin-top: 3rem;
+      border-top: 1px solid #27272a;
+      box-shadow: 0 -2px 12px 0 rgba(0,0,0,0.10);
+    }
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
       display: flex;
+      align-items: center;
+      justify-content: space-between;
       flex-wrap: wrap;
       gap: 1.5rem;
-      justify-content: center;
+      padding: 0 2vw;
     }
-    .feature-card {
-      background: rgba(255,255,255,0.13);
-      border-radius: 18px;
-      padding: 1.2rem 1.5rem;
-      min-width: 180px;
-      max-width: 220px;
+    .footer-brand {
+      font-size: 1.6rem;
+      font-weight: 700;
       color: #fff;
-      box-shadow: 0 2px 8px rgba(31,38,135,0.10);
-      font-size: 1.05rem;
-      transition: transform 0.2s, box-shadow 0.2s;
-      border: 1px solid rgba(255,255,255,0.08);
-      animation: fadeIn 1.2s cubic-bezier(.39,.575,.565,1) backwards;
+      letter-spacing: 1px;
+      flex: 1;
+      text-align: left;
     }
-    .feature-card:nth-child(1) { animation-delay: 0.2s;}
-    .feature-card:nth-child(2) { animation-delay: 0.4s;}
-    .feature-card:nth-child(3) { animation-delay: 0.6s;}
-    .feature-card:nth-child(4) { animation-delay: 0.8s;}
-    .feature-card:hover {
-      transform: translateY(-6px) scale(1.03);
-      box-shadow: 0 6px 24px rgba(31,38,135,0.18);
-      background: rgba(255,255,255,0.18);
+    .footer-social {
+      display: flex;
+      gap: 1.2rem;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
     }
-    @media (max-width: 700px) {
-      .container { padding: 2rem 1rem; }
-      h1 { font-size: 2.1rem; }
-      .features { flex-direction: column; align-items: center; }
+    .footer-social img {
+      width: 28px;
+      height: 28px;
+      filter: grayscale(1) brightness(0.7) invert(1);
+      transition: filter 0.2s, transform 0.2s;
+      vertical-align: middle;
+    }
+    .footer-social a:hover img {
+      filter: none;
+      transform: scale(1.15);
+    }
+    .footer-links {
+      display: flex;
+      gap: 1.2rem;
+      flex: 1;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      color: #d1d5db;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: color 0.2s;
+      font-weight: 500;
+    }
+    .footer-links a:hover {
+      color: #60a5fa;
+      text-decoration: underline;
+    }
+    .footer-copy {
+      text-align: center;
+      color: #a1a1aa;
+      font-size: 1rem;
+      margin-top: 1.2rem;
+      letter-spacing: 0.5px;
+    }
+    @media (max-width: 900px) {
+      .footer-content {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.2rem;
+        padding: 0 1vw;
+      }
+      .footer-brand, .footer-links {
+        text-align: center;
+        justify-content: center;
+      }
+      .footer-links {
+        flex-wrap: wrap;
+        gap: 0.8rem;
+      }
     }
   </style>
 </head>
 <body>
   <nav>
-    <a href="index.html">Home</a>
-    <a href="quiz.html">Take Quiz</a>
-    <a href="login.html">Admin Login</a>
+    <span class="navbar-brand">QuizNest</span>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="quiz-entry.html">Take Quiz</a>
+      <a href="create-quiz.html">Create Quiz</a>
+      <a href="login.html">Admin Login</a>
+      <a href="admin-panel.html">Admin Panel</a>
+    </div>
   </nav>
-  <div class="container">
-    <h1>Online Quiz Maker</h1>
-    <p>
-      Create, manage, and take quizzes with ease.<br>
-      Challenge your friends or students, track scores, and enjoy a seamless quiz experience!
-    </p>
-    <div class="cta-buttons">
+  <div class="main-flex">
+    <div class="left-content">
+      <div class="headline">
+        The Best Online Testing for <span> Education</span>
+      </div>
+      <div class="subheadline">
+        Our secure, professional web-based Quiz Maker is an easy-to-use, customizable online testing solution for training &amp; educational assessments with quizzes graded instantly, saving hours of paperwork!
+      </div>
       <button class="cta-btn" onclick="window.location.href='quiz-entry.html'">Take a Quiz</button>
       <button class="cta-btn" onclick="window.location.href='login.html'">Admin Login</button>
     </div>
-    <div class="features">
-      <div class="feature-card">
-        <strong>Easy Quiz Creation</strong><br>
-        Build quizzes in minutes with a simple interface.
-      </div>
-      <div class="feature-card">
-        <strong>Real-Time Timer</strong><br>
-        Adjustable timer for each quiz, set by admin.
-      </div>
-      <div class="feature-card">
-        <strong>Secure Admin Panel</strong><br>
-        Only admins can manage questions and settings.
-      </div>
-      <div class="feature-card">
-        <strong>Instant Results</strong><br>
-        Get your score and feedback right after the quiz!
-      </div>
+    <div class="right-image">
+      <img src="https://prod.smassets.net/assets/content/sm/use-cases-online-quiz-create-high-quality-quizzes-our-easy-to-use-quiz-maker.webp"
+           alt="Quiz Maker">
     </div>
   </div>
-  <script>
-    // Fade-in animation for container and feature cards (already handled by CSS)
-    // You can add more JS for interactivity if needed
-  </script>
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">QuizNest</div>
+      <div class="footer-social">
+        <a href="#" title="Facebook" target="_blank" rel="noopener">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook" />
+        </a>
+        <a href="#" title="Twitter" target="_blank" rel="noopener">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/twitter.svg" alt="Twitter" />
+        </a>
+        <a href="#" title="Instagram" target="_blank" rel="noopener">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram" />
+        </a>
+        <a href="#" title="LinkedIn" target="_blank" rel="noopener">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn" />
+        </a>
+        <a href="#" title="YouTube" target="_blank" rel="noopener">
+          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube" />
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="quiz-entry.html">Take Quiz</a>
+        <a href="create-quiz.html">Create Quiz</a>
+        <a href="login.html">Admin Login</a>
+        <a href="admin-panel.html">Admin Panel</a>
+        <a href="#">Contact</a>
+        <a href="#">Privacy Policy</a>
+      </div>
+    </div>
+    <div class="footer-copy">&copy; 2025 QuizNest. All rights reserved.</div>
+  </footer>
 </body>
 </html>
