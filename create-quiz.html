@@ -34,7 +34,7 @@
       border-bottom: 2px solid #2563eb;
     }
     .quiz-create-container {
-      max-width: 600px;
+      max-width: 700px;
       margin: 7vh auto 0 auto;
       background: #fff;
       border-radius: 20px;
@@ -91,6 +91,7 @@
       padding: 1rem;
       margin-bottom: 1.2rem;
       box-shadow: 0 2px 8px rgba(59,130,246,0.03);
+      position: relative;
     }
     .question-block label {
       font-weight: 500;
@@ -104,10 +105,10 @@
       color: #ef4444;
       font-weight: 600;
       cursor: pointer;
-      float: right;
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
       font-size: 1rem;
-      margin-top: -0.5rem;
-      margin-bottom: 0.5rem;
       transition: color 0.2s;
     }
     .remove-question-btn:hover {
@@ -136,11 +137,62 @@
       background: linear-gradient(90deg, #06b6d4 0%, #3b82f6 100%);
       color: #fff;
     }
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .option-row {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+    .option-row input[type="text"] {
+      flex: 1;
+      padding: 0.7rem 0.8rem;
+      font-size: 1rem;
+      border-radius: 7px;
+      border: 1px solid #e0e7ef;
+      background: #fff;
+    }
+    .option-row input[type="radio"] {
+      accent-color: #3b82f6;
+      margin-left: 0.5rem;
+    }
+    .add-option-btn {
+      margin-top: 0.7rem;
+      background: none;
+      border: 1.5px dashed #3b82f6;
+      color: #3b82f6;
+      border-radius: 20px;
+      padding: 0.5rem 1.2rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .add-option-btn:hover {
+      background: #e9f5ff;
+      color: #2563eb;
+    }
     .success-message {
       color: #22c55e;
       font-weight: 600;
       margin-top: 1rem;
       text-align: center;
+    }
+    .quiz-code-message {
+      color: #3b82f6;
+      font-weight: 600;
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      background: #f3f6fa;
+      border-radius: 10px;
+      padding: 0.7rem 0.5rem;
+      display: inline-block;
     }
     .error-message {
       color: #ef4444;
@@ -149,7 +201,7 @@
       min-height: 1.2em;
       text-align: center;
     }
-    @media (max-width: 600px) {
+    @media (max-width: 700px) {
       .quiz-create-container { padding: 1.2rem 0.3rem; }
     }
   </style>
@@ -158,6 +210,7 @@
   <nav>
     <a href="index.html">Home</a>
     <a href="quiz-entry.html">Take Quiz</a>
+    <a href="create-quiz.html">Create Quiz</a>
     <a href="login.html">Admin Login</a>
   </nav>
   <div class="quiz-create-container">
@@ -169,6 +222,9 @@
       <label for="numQuestions">Number of Questions</label>
       <input type="number" id="numQuestions" name="numQuestions" min="1" max="50" value="1" required>
 
+      <label for="duration">Quiz Duration (minutes)</label>
+      <input type="number" id="duration" name="duration" min="1" max="180" value="10" required>
+
       <div class="questions-section" id="questionsSection">
         <!-- Questions will be dynamically inserted here -->
       </div>
@@ -176,17 +232,24 @@
       <button type="button" class="add-question-btn" id="addQuestionBtn">+ Add Question</button>
       <button type="submit" class="submit-btn">Create Quiz</button>
       <div class="success-message" id="successMsg"></div>
+      <div class="quiz-code-message" id="quizCodeMsg" style="display:none;"></div>
       <div class="error-message" id="errorMsg"></div>
     </form>
   </div>
   <script>
-    // Dynamically handle questions
+    if (!localStorage.getItem('adminToken')) {
+      alert('Please login as admin to access this page.');
+      window.location.href = 'login.html';
+    }
+  </script>
+  <script>
     const numQuestionsInput = document.getElementById('numQuestions');
     const questionsSection = document.getElementById('questionsSection');
     const addQuestionBtn = document.getElementById('addQuestionBtn');
     const quizCreateForm = document.getElementById('quizCreateForm');
     const successMsg = document.getElementById('successMsg');
     const errorMsg = document.getElementById('errorMsg');
+    const quizCodeMsg = document.getElementById('quizCodeMsg');
 
     let questionCount = 1;
 
@@ -196,8 +259,20 @@
           <button type="button" class="remove-question-btn" onclick="removeQuestion(${index})" ${index === 1 ? 'style="display:none;"' : ''}>Remove</button>
           <label>Question ${index}</label>
           <input type="text" name="question${index}" placeholder="Enter question" required>
-          <label>Answer</label>
-          <input type="text" name="answer${index}" placeholder="Enter answer" required>
+          <label>Options (Choose the correct one):</label>
+          <div class="options-list" id="optionsList${index}">
+            <div class="option-row">
+              <input type="text" name="option${index}_1" placeholder="Option 1" required>
+              <input type="radio" name="correctOption${index}" value="0" required title="Mark as correct">
+              <span style="font-size:0.95em;color:#888;">Correct</span>
+            </div>
+            <div class="option-row">
+              <input type="text" name="option${index}_2" placeholder="Option 2" required>
+              <input type="radio" name="correctOption${index}" value="1" title="Mark as correct">
+              <span style="font-size:0.95em;color:#888;">Correct</span>
+            </div>
+          </div>
+          <button type="button" class="add-option-btn" onclick="addOption(${index})">+ Add Option</button>
         </div>
       `;
     }
@@ -221,6 +296,40 @@
       }
     };
 
+    // Add option to objective question
+    window.addOption = function(index) {
+      const optionsList = document.getElementById(`optionsList${index}`);
+      const currentOptions = optionsList.querySelectorAll('.option-row').length;
+      if (currentOptions >= 6) return;
+      const row = document.createElement('div');
+      row.className = 'option-row';
+      row.innerHTML = `
+        <input type="text" name="option${index}_${currentOptions+1}" placeholder="Option ${currentOptions+1}" required>
+        <input type="radio" name="correctOption${index}" value="${currentOptions}" title="Mark as correct">
+        <span style="font-size:0.95em;color:#888;">Correct</span>
+      `;
+      optionsList.appendChild(row);
+    };
+
+    // Toggle between objective and subjective
+    window.toggleType = function(index) {
+      const type = document.getElementById(`type${index}`).value;
+      const objSection = document.getElementById(`objectiveSection${index}`);
+      const subjSection = document.getElementById(`subjectiveSection${index}`);
+      objSection.style.display = type === 'objective' ? 'block' : 'none';
+      subjSection.style.display = type === 'subjective' ? 'block' : 'none';
+
+      // Set required attributes correctly
+      // For objective
+      Array.from(objSection.querySelectorAll('input,select,textarea')).forEach(input => {
+        input.required = (type === 'objective');
+      });
+      // For subjective
+      Array.from(subjSection.querySelectorAll('input,select,textarea')).forEach(input => {
+        input.required = (type === 'subjective');
+      });
+    };
+
     // Initial render
     renderQuestions(Number(numQuestionsInput.value));
 
@@ -241,31 +350,94 @@
       }
     });
 
+    // Generate random quiz code
+    function generateQuizCode(length = 6) {
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      let code = '';
+      for (let i = 0; i < length; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return code;
+    }
+
     // Handle form submit (demo only)
-    quizCreateForm.addEventListener('submit', function(e) {
+    quizCreateForm.addEventListener('submit', async function(e) {
       e.preventDefault();
       successMsg.textContent = '';
       errorMsg.textContent = '';
+      quizCodeMsg.style.display = 'none';
+      quizCodeMsg.textContent = '';
+
       const quizName = document.getElementById('quizName').value.trim();
+      const duration = document.getElementById('duration').value;
       if (!quizName) {
         errorMsg.textContent = 'Quiz name is required.';
         return;
       }
-      // Validate all questions and answers
+      if (!duration || isNaN(duration) || duration < 1) {
+        errorMsg.textContent = 'Please enter a valid quiz duration.';
+        return;
+      }
+
+      // Collect questions
+      const questions = [];
       for (let i = 1; i <= questionCount; i++) {
         const q = quizCreateForm[`question${i}`];
-        const a = quizCreateForm[`answer${i}`];
-        if (!q || !a || !q.value.trim() || !a.value.trim()) {
-          errorMsg.textContent = `Please fill all questions and answers.`;
+        if (!q || !q.value.trim()) {
+          errorMsg.textContent = `Please fill all questions.`;
           return;
         }
+        const options = Array.from(quizCreateForm.querySelectorAll(`[name^="option${i}_"]`)).map(opt => opt.value.trim()).filter(Boolean);
+        if (options.length < 2) {
+          errorMsg.textContent = `Please provide at least 2 options for question ${i}.`;
+          return;
+        }
+        const correct = quizCreateForm.querySelector(`input[name="correctOption${i}"]:checked`);
+        if (!correct) {
+          errorMsg.textContent = `Please select the correct option for question ${i}.`;
+          return;
+        }
+        questions.push({
+          question: q.value.trim(),
+          options,
+          correctIndex: Number(correct.value)
+        });
       }
-      // Demo: show success
-      successMsg.textContent = 'Quiz created successfully!';
-      quizCreateForm.reset();
-      renderQuestions(1);
-      numQuestionsInput.value = 1;
-      setTimeout(() => { successMsg.textContent = ''; }, 2000);
+
+      // Prepare quiz data
+      const quizData = {
+        name: quizName,
+        duration: Number(duration),
+        questions
+      };
+
+      // Send to backend (MongoDB)
+      try {
+        console.log('Sending quiz data to backend:', quizData);
+        const response = await fetch('http://localhost:3000/api/quizzes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(quizData)
+        });
+        console.log('Received response status:', response.status);
+        const result = await response.json();
+        console.log('Response JSON:', result);
+        // After successful creation
+        if (result.success) {
+          successMsg.textContent = 'Quiz created successfully!';
+          quizCodeMsg.textContent = `Quiz Code: ${result.code}`;
+          quizCodeMsg.style.display = 'block';
+          quizCreateForm.reset();
+          renderQuestions(1);
+          numQuestionsInput.value = 1;
+          setTimeout(() => { successMsg.textContent = ''; }, 4000);
+        } else {
+          errorMsg.textContent = 'Failed to create quiz.';
+        }
+      } catch (err) {
+        console.error('Error during fetch:', err);
+        errorMsg.textContent = 'Server error. Please try again.';
+      }
     });
   </script>
 </body>
