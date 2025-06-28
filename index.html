@@ -2,305 +2,347 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Online Quiz Maker</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Google Fonts for modern look -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <!-- Add this Google Font for the brand -->
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>QuizNest – Create Engaging Quizzes Instantly</title>
+  <meta name="description" content="No code. No hassle. Just smart, beautiful quizzes powered by AI. Try QuizNest free today!">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Pacifico&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="icon" href="https://aura.chat/favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body {
-      margin: 0;
-      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
-      min-height: 100vh;
-      color: #222;
-      background: #e0eafc;
-      /* Blurred background image */
-      background-image: url('');
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
-      position: relative;
-    }
+    body { font-family: 'Inter', 'Pacifico', Arial, sans-serif; }
+    html { scroll-behavior: smooth; }
     .bg-blur {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(255,255,255,0.6);
-      backdrop-filter: blur(8px);
-      z-index: 0;
+      backdrop-filter: blur(20px);
+      background: rgba(255,255,255,0.7);
     }
-    nav {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      padding: 2rem 3rem 0 3rem;
-      z-index: 2;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .quiznest-blob-1 {
+      animation: blobMove1 12s infinite alternate;
     }
+    .quiznest-blob-2 {
+      animation: blobMove2 16s infinite alternate;
+    }
+    @keyframes blobMove1 { 0% {transform:translateY(0);} 100% {transform:translateY(40px) scale(1.04);} }
+    @keyframes blobMove2 { 0% {transform:translate(0,0);} 100% {transform:translate(30px, 20px) scale(1.05);} }
+    input:focus { outline: 2px solid #a5b4fc; }
     .navbar-brand {
       font-family: 'Pacifico', cursive;
       font-size: 2rem;
       color: #2563eb;
       letter-spacing: 2px;
       font-weight: 700;
-      margin-right: 2.5rem;
-      text-shadow: 0 2px 8px rgba(59,130,246,0.10);
       user-select: none;
       white-space: nowrap;
     }
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 2rem;
-    }
-    nav a {
-      color: #2563eb;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1.1rem;
-      transition: color 0.2s;
-      letter-spacing: 0.5px;
-    }
-    nav a:hover {
-      color: #0ea5e9;
-    }
-    .main-flex {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-      max-width: 1200px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
-      padding: 0 3vw;
-    }
-    .left-content {
-      max-width: 540px;
-      color: #222;
-      padding-left: 0;      /* Remove left padding */
-          /* Optional: add a small left margin */
-      text-align: left;
-      flex: 1;
-    }
-    .right-image {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding-left: 2vw;
-    }
-    .right-image img {
-      max-width: 500px; /* Increased from 400px to 600px */
-      width: 100%;
-      border-radius: 24px;
-      box-shadow: 0 8px 32px 0 rgba(59, 130, 246, 0.10);
-      object-fit: cover;
-      background: #fff;
-    }
-    .headline {
-      font-size: 2.8rem;
-      font-weight: 700;
-      line-height: 1.15;
-      margin-bottom: 1.2rem;
-      color: #1e293b;
-      letter-spacing: 1px;
-    }
-    .headline span {
-      color: #2563eb;
-    }
-    .subheadline {
-      font-size: 1.18rem;
-      color: #334155;
-      margin-bottom: 2.2rem;
-      font-weight: 400;
-      line-height: 1.5;
-    }
-    .cta-btn {
-      padding: 1.1rem 2.7rem;
-      font-size: 1.18rem;
-      border: none;
-      border-radius: 30px;
-      background: linear-gradient(90deg, #2563eb 0%, #0ea5e9 100%);
-      color: #fff;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 4px 16px rgba(59,130,246,0.13);
-      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
-      outline: none;
-      margin-right: 1.2rem;
-      margin-bottom: 1.2rem;
-      letter-spacing: 0.5px;
-    }
-    .cta-btn:hover {
-      transform: translateY(-4px) scale(1.04);
-      box-shadow: 0 8px 32px rgba(59,130,246,0.18);
-      background: linear-gradient(90deg, #0ea5e9 0%, #2563eb 100%);
-    }
-    @media (max-width: 900px) {
-      .main-flex { flex-direction: column; padding: 0 2vw; }
-      .left-content { padding-left: 0; }
-      .right-image { justify-content: center; padding-left: 0; margin-top: 2rem; }
-      .right-image img { max-width: 90vw; }
-      nav { padding: 1.2rem 1.2rem 0 0; }
-    }
-    @media (max-width: 600px) {
-      .main-flex { padding: 0 0.5vw; }
-      .left-content { padding-left: 0; }
-      .headline { font-size: 2rem; }
-      .right-image img { max-width: 98vw; }
-    }
-    .footer {
-      width: 100%;
-      background: #18181b;
-      padding: 2rem 0 1rem 0;
-      margin-top: 3rem;
-      border-top: 1px solid #27272a;
-      box-shadow: 0 -2px 12px 0 rgba(0,0,0,0.10);
-    }
-    .footer-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      padding: 0 2vw;
-    }
-    .footer-brand {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: 1px;
-      flex: 1;
-      text-align: left;
-    }
-    .footer-social {
-      display: flex;
-      gap: 1.2rem;
-      justify-content: center;
-      align-items: center;
-      flex: 1;
-    }
-    .footer-social img {
-      width: 28px;
-      height: 28px;
-      filter: grayscale(1) brightness(0.7) invert(1);
-      transition: filter 0.2s, transform 0.2s;
-      vertical-align: middle;
-    }
-    .footer-social a:hover img {
-      filter: none;
-      transform: scale(1.15);
-    }
-    .footer-links {
-      display: flex;
-      gap: 1.2rem;
-      flex: 1;
-      justify-content: flex-end;
-      flex-wrap: wrap;
-    }
-    .footer-links a {
-      color: #d1d5db;
-      text-decoration: none;
-      font-size: 1rem;
-      transition: color 0.2s;
-      font-weight: 500;
-    }
-    .footer-links a:hover {
-      color: #60a5fa;
-      text-decoration: underline;
-    }
-    .footer-copy {
-      text-align: center;
-      color: #a1a1aa;
-      font-size: 1rem;
-      margin-top: 1.2rem;
-      letter-spacing: 0.5px;
-    }
-    @media (max-width: 900px) {
-      .footer-content {
-        flex-direction: column;
-        align-items: center;
-        gap: 1.2rem;
-        padding: 0 1vw;
-      }
-      .footer-brand, .footer-links {
-        text-align: center;
-        justify-content: center;
-      }
-      .footer-links {
-        flex-wrap: wrap;
-        gap: 0.8rem;
-      }
-    }
   </style>
 </head>
-<body>
-  <nav>
-    <span class="navbar-brand">QuizNest</span>
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="quiz-entry.html">Take Quiz</a>
-      <a href="create-quiz.html">Create Quiz</a>
-      <a href="login.html">Admin Login</a>
-      <a href="admin-panel.html">Admin Panel</a>
-    </div>
-  </nav>
-  <div class="main-flex">
-    <div class="left-content">
-      <div class="headline">
-        The Best Online Testing for <span> Education</span>
+<body class="bg-white text-gray-800 min-h-screen tracking-normal selection:bg-indigo-100 text-[1.15rem] sm:text-[1.18rem] md:text-[1.22rem]">
+  <!-- Navbar -->
+  <header class="sticky top-0 z-40 w-full bg-white/80 backdrop-blur shadow-sm transition">
+    <nav class="max-w-[1600px] mx-auto px-8 sm:px-16 flex items-center justify-between h-20" aria-label="Main Navigation">
+      <span class="navbar-brand">QuizNest</span>
+      <ul class="hidden md:flex items-center space-x-10 font-medium text-gray-700 text-lg">
+        <li><a href="#features" class="hover:text-indigo-500 transition">Features</a></li>
+        <!-- <li><a href="#templates" class="hover:text-indigo-500 transition">Templates</a></li> -->
+        <li><a href="quiz-entry.html" class="hover:text-indigo-500 transition">Take Quiz</a></li>
+        <li><a href="create-quiz.html" class="hover:text-indigo-500 transition">Create Quiz</a></li>
+        <li><a href="login.html" class="hover:text-indigo-500 transition">Admin Login</a></li>
+        <li><a href="admin-panel.html" class="hover:text-indigo-500 transition">Admin Panel</a></li>
+        <li>
+          <a href="#get-in-touch" class="ml-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-lg shadow transition outline-none ring-indigo-200 focus:ring-2">
+            Get in Touch
+          </a>
+        </li>
+      </ul>
+      <!-- Mobile menu button -->
+      <div class="md:hidden flex items-center">
+        <button id="menu-btn" aria-label="Open Menu" class="p-2 rounded hover:bg-indigo-100 transition">
+          <svg id="lucide-menu" width="32" height="32"></svg>
+        </button>
       </div>
-      <div class="subheadline">
-        Our secure, professional web-based Quiz Maker is an easy-to-use, customizable online testing solution for training &amp; educational assessments with quizzes graded instantly, saving hours of paperwork!
-      </div>
-      <button class="cta-btn" onclick="window.location.href='quiz-entry.html'">Take a Quiz</button>
-      <button class="cta-btn" onclick="window.location.href='login.html'">Admin Login</button>
+    </nav>
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="md:hidden fixed inset-0 z-50 bg-white/95 backdrop-blur-lg hidden flex-col p-8 space-y-7 text-lg">
+      <button id="close-menu" aria-label="Close Menu" class="ml-auto mb-2 p-2 rounded hover:bg-indigo-100">
+        <svg id="lucide-x" width="32" height="32"></svg>
+      </button>
+      <a href="#features" class="block font-medium text-gray-700 hover:text-indigo-600">Features</a>
+      <a href="#templates" class="block font-medium text-gray-700 hover:text-indigo-600">Templates</a>
+      <a href="quiz-entry.html" class="block font-medium text-gray-700 hover:text-indigo-600">Take Quiz</a>
+      <a href="create-quiz.html" class="block font-medium text-gray-700 hover:text-indigo-600">Create Quiz</a>
+      <a href="login.html" class="block font-medium text-gray-700 hover:text-indigo-600">Admin Login</a>
+      <a href="admin-panel.html" class="block font-medium text-gray-700 hover:text-indigo-600">Admin Panel</a>
+      <a href="#get-in-touch" class="block mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-center px-7 py-4 rounded-lg shadow">Get in Touch</a>
     </div>
-    <div class="right-image">
-      <img src="https://prod.smassets.net/assets/content/sm/use-cases-online-quiz-create-high-quality-quizzes-our-easy-to-use-quiz-maker.webp"
-           alt="Quiz Maker">
-    </div>
-  </div>
-  <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-brand">QuizNest</div>
-      <div class="footer-social">
-        <a href="#" title="Facebook" target="_blank" rel="noopener">
-          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook" />
-        </a>
-        <a href="#" title="Twitter" target="_blank" rel="noopener">
-          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/twitter.svg" alt="Twitter" />
-        </a>
-        <a href="#" title="Instagram" target="_blank" rel="noopener">
-          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram" />
-        </a>
-        <a href="#" title="LinkedIn" target="_blank" rel="noopener">
-          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn" />
-        </a>
-        <a href="#" title="YouTube" target="_blank" rel="noopener">
-          <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="YouTube" />
-        </a>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden pt-16 pb-24 sm:pb-32 bg-gradient-to-br from-indigo-50 via-white to-purple-50" id="hero">
+    <!-- Animated SVG Blobs -->
+    <svg class="absolute top-[-80px] left-[-100px] w-[420px] h-[360px] opacity-40 quiznest-blob-1 pointer-events-none" viewBox="0 0 700 700" fill="none">
+      <defs>
+        <radialGradient id="blob1" cx="0.5" cy="0.5" r="1">
+          <stop offset="0%" stop-color="#a5b4fc" stop-opacity="0.6"/>
+          <stop offset="100%" stop-color="#f3e8ff" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <ellipse cx="350" cy="350" rx="320" ry="170" fill="url(#blob1)"/>
+    </svg>
+    <svg class="absolute bottom-[-120px] right-[-60px] w-[340px] h-[340px] opacity-30 quiznest-blob-2 pointer-events-none" viewBox="0 0 600 600" fill="none">
+      <defs>
+        <radialGradient id="blob2" cx="0.5" cy="0.5" r="1">
+          <stop offset="0%" stop-color="#c7d2fe" stop-opacity="0.5"/>
+          <stop offset="100%" stop-color="#e0e7ff" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <ellipse cx="300" cy="300" rx="270" ry="120" fill="url(#blob2)"/>
+    </svg>
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 flex flex-col md:flex-row items-center justify-between gap-12">
+      <div class="w-full md:w-1/2" data-aos="fade-right" data-aos-delay="100">
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-poppins font-semibold tracking-tight text-gray-900 mb-6">
+          Create Engaging Quizzes Instantly.
+        </h1>
+        <p class="text-lg sm:text-xl text-gray-500 mb-8">
+          No code. No hassle. Just smart, beautiful quizzes powered by AI.
+        </p>
+        <div class="flex space-x-4">
+          <a href="create-quiz.html" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-7 py-3 rounded-lg shadow transition outline-none ring-indigo-200 focus:ring-2">
+            Create a Quiz
+          </a>
+          <a href="quiz-entry.html" class="inline-flex items-center bg-white/80 hover:bg-indigo-50 border border-indigo-100 text-indigo-600 font-semibold px-7 py-3 rounded-lg shadow transition outline-none ring-indigo-200 focus:ring-2">
+            <svg id="lucide-play-circle" class="mr-2" width="22" height="22"></svg>
+            Take a Quiz
+          </a>
+        </div>
       </div>
-      <div class="footer-links">
-        <a href="index.html">Home</a>
-        <a href="quiz-entry.html">Take Quiz</a>
-        <a href="create-quiz.html">Create Quiz</a>
-        <a href="login.html">Admin Login</a>
-        <a href="admin-panel.html">Admin Panel</a>
-        <a href="#">Contact</a>
-        <a href="#">Privacy Policy</a>
+      <div class="w-full md:w-1/2 flex justify-center relative z-10 mt-12 md:mt-0" data-aos="fade-left" data-aos-delay="200">
+        <!-- Lottie Illustration -->
+        <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_aesgckiv.json" background="transparent" speed="1" style="width: 380px; height: 380px;" loop autoplay></lottie-player>
       </div>
     </div>
-    <div class="footer-copy">&copy; 2025 QuizNest. All rights reserved.</div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="max-w-[1600px] mx-auto px-8 sm:px-16 py-24" id="features">
+    <h2 class="text-3xl sm:text-4xl font-poppins font-semibold tracking-tight text-center text-gray-900 mb-12" data-aos="fade-up">
+      Everything You Need to Create Powerful Quizzes
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-7 transition hover:shadow-md hover:-translate-y-1 hover:border-indigo-100 duration-200" data-aos="fade-up" data-aos-delay="100">
+        <div class="flex items-center justify-center w-12 h-12 bg-indigo-50 rounded-full mb-5">
+          <svg id="lucide-layout" width="28" height="28" class="text-indigo-500"></svg>
+        </div>
+        <h3 class="font-semibold text-lg mb-2">Drag &amp; Drop Builder</h3>
+        <p class="text-gray-500 text-base">Create quizzes effortlessly with our visual editor. No coding needed.</p>
+      </div>
+      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-7 transition hover:shadow-md hover:-translate-y-1 hover:border-indigo-100 duration-200" data-aos="fade-up" data-aos-delay="150">
+        <div class="flex items-center justify-center w-12 h-12 bg-purple-50 rounded-full mb-5">
+          <svg id="lucide-bar-chart-2" width="28" height="28" class="text-purple-400"></svg>
+        </div>
+        <h3 class="font-semibold text-lg mb-2">Multiple Question Types</h3>
+        <p class="text-gray-500 text-base">MCQ, true/false, short answer, images, and more.</p>
+      </div>
+      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-7 transition hover:shadow-md hover:-translate-y-1 hover:border-indigo-100 duration-200" data-aos="fade-up" data-aos-delay="200">
+        <div class="flex items-center justify-center w-12 h-12 bg-blue-50 rounded-full mb-5">
+          <svg id="lucide-brain-cog" width="28" height="28" class="text-blue-400"></svg>
+        </div>
+        <h3 class="font-semibold text-lg mb-2">Real-time Analytics</h3>
+        <p class="text-gray-500 text-base">Track performance instantly with detailed reports & insights.</p>
+      </div>
+       <!-- <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-7 transition hover:shadow-md hover:-translate-y-1 hover:border-indigo-100 duration-200" data-aos="fade-up" data-aos-delay="250">
+        <div class="flex items-center justify-center w-12 h-12 bg-indigo-100 rounded-full mb-5">
+          <svg id="lucide-palette" width="28" height="28" class="text-indigo-400"></svg> 
+        <!-- </div> -->
+        <!-- <h3 class="font-semibold text-lg mb-2">Custom Branding</h3>
+        <p class="text-gray-500 text-base">Your logo, colors, and themes for a truly branded experience.</p>
+      </div> --> -->
+      <!-- <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-7 transition hover:shadow-md hover:-translate-y-1 hover:border-indigo-100 duration-200" data-aos="fade-up" data-aos-delay="300">
+        <div class="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full mb-5">
+          <svg id="lucide-clock" width="28" height="28" class="text-blue-400"></svg> -->
+        <!-- </div>
+        <h3 class="font-semibold text-lg mb-2">Timer &amp; Scoring Settings</h3>
+        <p class="text-gray-500 text-base">Set time limits, custom scoring, and instant feedback for quizzes.</p>
+      </div> -->
+      <!-- <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-7 transition hover:shadow-md hover:-translate-y-1 hover:border-indigo-100 duration-200" data-aos="fade-up" data-aos-delay="350">
+        <div class="flex items-center justify-center w-12 h-12 bg-purple-100 rounded-full mb-5">
+          <svg id="lucide-plug" width="28" height="28" class="text-purple-400"></svg>
+        </div> -->
+        <!-- <h3 class="font-semibold text-lg mb-2">Seamless Integrations</h3>
+        <p class="text-gray-500 text-base">Connect with Google Classroom, MS Teams, Slack, and more.</p>
+      </div> -->
+    </div>
+  </section>
+
+  <!-- Templates Preview Section -->
+  <!-- <section class="max-w-7xl mx-auto px-4 sm:px-8 py-20" id="templates">
+    <h2 class="text-3xl font-poppins font-semibold tracking-tight text-center text-gray-900 mb-12" data-aos="fade-up">
+      Try Popular Templates
+    </h2>
+    <div class="flex overflow-x-auto gap-6 pb-2 hide-scrollbar" data-aos="fade-up" data-aos-delay="100">
+      <div class="min-w-[260px] max-w-xs bg-white rounded-2xl border border-gray-100 shadow group transition hover:shadow-lg hover:border-indigo-200 hover:-translate-y-1 duration-200 cursor-pointer flex-shrink-0">
+        <img src="https://images.unsplash.com/photo-1621619856624-42fd193a0661?w=600&q=80" alt="Trivia Template" class="rounded-t-2xl w-full h-36 object-cover">
+        <div class="p-5">
+          <h3 class="font-semibold text-lg mb-1">General Knowledge Trivia</h3>
+          <p class="text-sm text-gray-500 mb-3">Test your smarts with this fun, multi-topic quiz.</p>
+          <button class="px-4 py-2 bg-indigo-50 text-indigo-600 font-medium rounded-lg group-hover:bg-indigo-100 transition">Preview</button>
+        </div>
+      </div>
+      <div class="min-w-[260px] max-w-xs bg-white rounded-2xl border border-gray-100 shadow group transition hover:shadow-lg hover:border-indigo-200 hover:-translate-y-1 duration-200 cursor-pointer flex-shrink-0">
+        <img src="https://images.unsplash.com/photo-1629946832022-c327f74956e0?w=600&q=80" alt="Personality Quiz" class="rounded-t-2xl w-full h-36 object-cover">
+        <div class="p-5">
+          <h3 class="font-semibold text-lg mb-1">Personality Quiz</h3>
+          <p class="text-sm text-gray-500 mb-3">Discover your type with engaging, shareable questions.</p>
+          <button class="px-4 py-2 bg-indigo-50 text-indigo-600 font-medium rounded-lg group-hover:bg-indigo-100 transition">Preview</button>
+        </div>
+      </div>
+      <div class="min-w-[260px] max-w-xs bg-white rounded-2xl border border-gray-100 shadow group transition hover:shadow-lg hover:border-indigo-200 hover:-translate-y-1 duration-200 cursor-pointer flex-shrink-0">
+        <img src="https://images.unsplash.com/photo-1724525647065-f948fc102e68?w=600&q=80" alt="Employee Onboarding" class="rounded-t-2xl w-full h-36 object-cover">
+        <div class="p-5">
+          <h3 class="font-semibold text-lg mb-1">Employee Onboarding</h3>
+          <p class="text-sm text-gray-500 mb-3">Streamline new hire learning with interactive quizzes.</p>
+          <button class="px-4 py-2 bg-indigo-50 text-indigo-600 font-medium rounded-lg group-hover:bg-indigo-100 transition">Preview</button>
+        </div>
+      </div>
+      <div class="min-w-[260px] max-w-xs bg-white rounded-2xl border border-gray-100 shadow group transition hover:shadow-lg hover:border-indigo-200 hover:-translate-y-1 duration-200 cursor-pointer flex-shrink-0">
+        <img src="https://images.unsplash.com/photo-1642615835477-d303d7dc9ee9?w=600&q=80" alt="Product Knowledge" class="rounded-t-2xl w-full h-36 object-cover">
+        <div class="p-5">
+          <h3 class="font-semibold text-lg mb-1">Product Knowledge</h3>
+          <p class="text-sm text-gray-500 mb-3">Help teams master your product with easy quizzes.</p>
+          <button class="px-4 py-2 bg-indigo-50 text-indigo-600 font-medium rounded-lg group-hover:bg-indigo-100 transition">Preview</button>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+  <!-- Question & Answer Section -->
+  <section id="faq" class="py-24 bg-gradient-to-br from-blue-50 to-white relative z-10">
+    <div class="max-w-3xl mx-auto px-6">
+      <h2 class="text-3xl md:text-4xl font-bold text-center text-blue-800 mb-10 fade-in-up">Questions & Answers</h2>
+      <div class="space-y-6 fade-in-up" style="transition-delay:0.1s">
+        <div class="bg-white rounded-xl shadow p-5">
+          <div class="font-semibold text-lg text-blue-700 mb-2">Is there a free plan?</div>
+          <div class="text-gray-600">Yes! You can use QuizNest for free with unlimited quizzes and up to 50 responses per month.</div>
+        </div>
+        <div class="bg-white rounded-xl shadow p-5">
+          <div class="font-semibold text-lg text-blue-700 mb-2">Can I use my own branding?</div>
+          <div class="text-gray-600">Absolutely. Pro and Enterprise plans support custom themes, logos, and domain branding.</div>
+        </div>
+        <div class="bg-white rounded-xl shadow p-5">
+          <div class="font-semibold text-lg text-blue-700 mb-2">What integrations are available?</div>
+          <div class="text-gray-600">QuizNest integrates with Google Classroom, MS Teams, Slack, Zapier, and more.</div>
+        </div>
+        <div class="bg-white rounded-xl shadow p-5">
+          <div class="font-semibold text-lg text-blue-700 mb-2">Is my data secure?</div>
+          <div class="text-gray-600">Yes, all data is encrypted in transit and at rest. Enterprise plans include advanced security features.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Get In Touch Form (Black Section) -->
+  <section id="get-in-touch" class="py-20 bg-black text-white relative z-20">
+    <div class="max-w-2xl mx-auto px-6">
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 fade-in-up">Get in Touch</h2>
+      <form class="space-y-6 fade-in-up" style="transition-delay:0.1s" autocomplete="off">
+        <div>
+          <label for="name" class="block mb-2 font-semibold">Name</label>
+          <input type="text" id="name" name="name" required class="w-full px-4 py-3 rounded-lg bg-gray-900 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600 transition" placeholder="Your Name">
+        </div>
+        <div>
+          <label for="email" class="block mb-2 font-semibold">Email</label>
+          <input type="email" id="email" name="email" required class="w-full px-4 py-3 rounded-lg bg-gray-900 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600 transition" placeholder="you@email.com">
+        </div>
+        <div>
+          <label for="message" class="block mb-2 font-semibold">Message</label>
+          <textarea id="message" name="message" rows="5" required class="w-full px-4 py-3 rounded-lg bg-gray-900 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600 transition" placeholder="How can we help you?"></textarea>
+        </div>
+        <button type="submit" class="w-full py-3 rounded-lg bg-blue-700 hover:bg-blue-800 font-semibold text-white shadow transition">Send Message</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-50 border-t border-gray-100 mt-16 text-gray-700 text-base">
+    <div class="max-w-[1600px] mx-auto px-8 sm:px-16 py-16 grid grid-cols-1 md:grid-cols-5 gap-12">
+      <div class="md:col-span-2">
+        <span class="navbar-brand">QuizNest</span>
+        <p class="mt-3 text-gray-500">Smart, beautiful quizzes for teams, teachers, and creators.</p>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-2">About</h4>
+        <ul>
+          <li><a href="#features" class="hover:text-indigo-500 transition">Features</a></li>
+          <li><a href="#faq" class="hover:text-indigo-500 transition">Q&A</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-2">Links</h4>
+        <ul>
+          <li><a href="quiz-entry.html" class="hover:text-indigo-500 transition">Take Quiz</a></li>
+          <li><a href="create-quiz.html" class="hover:text-indigo-500 transition">Create Quiz</a></li>
+          <li><a href="login.html" class="hover:text-indigo-500 transition">Admin Login</a></li>
+          <li><a href="admin-panel.html" class="hover:text-indigo-500 transition">Admin Panel</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-2">Support</h4>
+        <ul>
+          <li><a href="#get-in-touch" class="hover:text-indigo-500 transition">Contact</a></li>
+          <li><a href="#" class="hover:text-indigo-500 transition">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="max-w-[1600px] mx-auto px-8 sm:px-16 pb-10 flex flex-col md:flex-row items-center justify-between border-t border-gray-100 pt-8 gap-8">
+      <form class="flex items-center w-full md:w-auto space-x-2" aria-label="Newsletter Signup">
+        <input type="email" required aria-label="Enter your email" placeholder="Subscribe for updates" class="rounded-lg border border-gray-200 px-4 py-2 text-gray-700 bg-white focus:ring-indigo-300 transition w-56 text-sm">
+        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium shadow transition">Subscribe</button>
+      </form>
+      <div class="flex items-center space-x-4 mt-4 md:mt-0">
+        <a href="#" aria-label="Twitter" class="text-gray-400 hover:text-indigo-500 transition"><svg id="lucide-twitter" width="22" height="22"></svg></a>
+        <a href="#" aria-label="LinkedIn" class="text-gray-400 hover:text-indigo-500 transition"><svg id="lucide-linkedin" width="22" height="22"></svg></a>
+        <a href="#" aria-label="Github" class="text-gray-400 hover:text-indigo-500 transition"><svg id="lucide-github" width="22" height="22"></svg></a>
+      </div>
+      <div class="text-gray-400 mt-5 md:mt-0 text-xs">&copy; 2025 QuizNest</div>
+    </div>
   </footer>
+
+  <script>
+    // Lucide icons
+    lucide.createIcons();
+
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const closeMenu = document.getElementById('close-menu');
+    menuBtn.addEventListener('click', () => mobileMenu.classList.remove('hidden'));
+    closeMenu.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+    // Close on outside click
+    mobileMenu.addEventListener('click', (e) => { if (e.target === mobileMenu) mobileMenu.classList.add('hidden'); });
+
+    // AOS animation
+    AOS.init({
+      once: true,
+      duration: 700,
+      easing: 'ease-out-cubic',
+    });
+
+    // Smooth anchor scrolling for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const hash = this.getAttribute('href');
+        const el = document.querySelector(hash);
+        if (el) {
+          e.preventDefault();
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          mobileMenu.classList.add('hidden');
+        }
+      });
+    });
+  </script>
 </body>
 </html>
